@@ -43,6 +43,11 @@ knowledge graph:
 * **A frontend extension using the standard Sirius Web workbench:** contribute
   an Explorer action and a custom React results dialog through frontend extension
   points. Maven builds and packages the extended frontend into the Java app.
+* **A custom widget for the Details view:** edit felt trust after a conversation,
+  and initial trust for pre-knowledge, with a red/yellow/green slider and a
+  synchronized numeric input. Java form descriptions and a React widget
+  contribution reuse Sirius Web's standard editing flow, with backend validation
+  and a distinct gray state for unassessed values.
 * **A project template with a worked example:** the **KEML Conversation** template
   has its own illustration and initializes an editable example conversation.
   It shows how to contribute a template and populate its model using Sirius Web's
@@ -73,7 +78,7 @@ downloads:
 | [`keml.io`](keml.io/) | Provides the existing KEML file-loading and serialization utilities, including JSON support and conversion from yEd/GraphML diagrams. These utilities support the analysis library and upstream command-line tools. |
 | [`keml.analysis`](keml.analysis/) | Analyses conversation statistics, argument relationships and trust scenarios. Exposes reusable Java results and CSV/Excel report generation, used by the sample application's analysis feature. It also retains the upstream standalone analysis entry points. |
 | [`keml.diagram`](keml.diagram/) | Defines the Sirius Web conversation timeline and knowledge graph, their node and edge creation tools, AQL services and layout. Contributes the **KEML Conversation** project template and example model. The module can be reused by another Sirius Web application. |
-| [`keml.frontend`](keml.frontend/) | Builds a React/Vite frontend using Sirius Web's published workbench components. Adds the **Analyse conversation…** dialog with Overview, Argumentation and Trust tabs, scenario controls and report download. Its frontend assets are packaged for the Java application. |
+| [`keml.frontend`](keml.frontend/) | Builds a React/Vite frontend using Sirius Web's published workbench components. Adds the **Analyse conversation…** dialog with Overview, Argumentation and Trust tabs, scenario controls and report download, plus a custom trust widget in Details. Its frontend assets are packaged for the Java application. |
 | [`keml.app`](keml.app/) | Launches the standalone Spring Boot application. Registers the EMF package and adapter factory, installs the diagram contributions, exposes analysis and report endpoints, and supplies application configuration and the startup banner. Produces the executable `keml.jar`. |
 | [`keml.releng`](keml.releng/) | Supplies the parent POM and complete Maven reactor, shared dependency versions and build configuration. Includes the Dockerfile, Docker Compose setup for the application and PostgreSQL, and detailed build, Eclipse import and launch documentation. |
 | [`web-editor`](web-editor/) | Contains the upstream KEML web editor's published static assets, retained as a reference for the Sirius Web experiment. It is outside the Maven reactor. |

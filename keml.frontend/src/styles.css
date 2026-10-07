@@ -1,3 +1,33 @@
 /* Keep the browser workbench full-height, including when launched directly on a project URL. */
 html, body, #root { min-height: 100%; }
 body { margin: 0; }
+
+/* Native range input, styled like the original KEML editor. Null stays gray;
+   a real neutral score (zero) keeps the red/yellow/green scale. */
+.keml-trust-range {
+  appearance: none;
+  width: 100%;
+  height: 14px;
+  margin: 8px 0;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #ff0000 0%, #ffff00 50%, #00ff00 100%);
+  cursor: pointer;
+}
+.keml-trust-range.keml-trust-unset { background: #d3d3d3; }
+.keml-trust-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 0;
+  border-radius: 50%;
+  background: #007bff;
+}
+.keml-trust-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: 0;
+  border-radius: 50%;
+  background: #007bff;
+}
+.keml-trust-range:focus-visible { outline: 2px solid #007bff; outline-offset: 4px; }
+.keml-trust-range:disabled { opacity: 0.5; cursor: default; }

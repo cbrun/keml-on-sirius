@@ -5,15 +5,20 @@ import {
   treeItemContextMenuEntryOverrideExtensionPoint,
 } from '@eclipse-sirius/sirius-components-trees';
 import { SiriusWebApplication } from '@eclipse-sirius/sirius-web-application';
+import { WidgetContribution, widgetContributionExtensionPoint } from '@eclipse-sirius/sirius-components-forms';
 import { PaletteToolOverriddenContributionProps, paletteToolOverrideExtensionPoint } from '@eclipse-sirius/sirius-components-palette';
 import { createRoot } from 'react-dom/client';
 import { AnalyseConversationMenu, AnalyseConversationPaletteTool } from './AnalysisDialog';
+import { trustWidgetContribution } from './TrustPropertySection';
 import '@xyflow/react/dist/style.css';
 import '@sirius-base-style';
 import './styles.css';
 
 // Contributions extend the published workbench. Preserve Sirius's existing menu entries.
 const registry = new ExtensionRegistry();
+registry.putData<WidgetContribution[]>(widgetContributionExtensionPoint, {
+  identifier: 'keml-trust-widget', data: [trustWidgetContribution],
+});
 registry.putData<TreeItemContextMenuOverrideContribution[]>(treeItemContextMenuEntryOverrideExtensionPoint, {
   identifier: 'keml-analysis-menu',
   data: [{ canHandle: (entry) => entry.id === 'keml-analyse-conversation', component: AnalyseConversationMenu }],
@@ -24,7 +29,7 @@ registry.putData<PaletteToolOverriddenContributionProps[]>(paletteToolOverrideEx
 });
 const mergeStrategy: ExtensionRegistryMergeStrategy = {
   mergeComponentExtensions: (_id, existing, added) => [...existing, ...added],
-  mergeDataExtensions: (id, existing, added) => [treeItemContextMenuEntryOverrideExtensionPoint.identifier, paletteToolOverrideExtensionPoint.identifier].includes(id)
+  mergeDataExtensions: (id, existing, added) => [treeItemContextMenuEntryOverrideExtensionPoint.identifier, paletteToolOverrideExtensionPoint.identifier, widgetContributionExtensionPoint.identifier].includes(id)
     ? { identifier: added.identifier, data: [...existing.data, ...added.data] }
     : added,
 };
