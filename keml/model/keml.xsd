@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xsd:schema xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:keml="http://www.unikoblenz.de/keml" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ecore:nsPrefix="keml" ecore:package="keml" targetNamespace="http://www.unikoblenz.de/keml">
+  <xsd:import namespace="http://www.eclipse.org/emf/2002/Ecore" schemaLocation="platform:/plugin/org.eclipse.emf.ecore/model/Ecore.xsd"/>
+  <xsd:element ecore:ignore="true" name="Conversation" type="keml:Conversation"/>
+  <xsd:element ecore:ignore="true" name="ConversationPartner" type="keml:ConversationPartner"/>
+  <xsd:element ecore:ignore="true" name="LifeLine" type="keml:LifeLine"/>
+  <xsd:element ecore:ignore="true" name="Author" type="keml:Author"/>
+  <xsd:element ecore:ignore="true" name="SendMessage" type="keml:SendMessage"/>
+  <xsd:element ecore:ignore="true" name="ReceiveMessage" type="keml:ReceiveMessage"/>
+  <xsd:element ecore:ignore="true" name="Message" type="keml:Message"/>
+  <xsd:element ecore:ignore="true" name="NewInformation" type="keml:NewInformation"/>
+  <xsd:element ecore:ignore="true" name="PreKnowledge" type="keml:PreKnowledge"/>
+  <xsd:element ecore:ignore="true" name="Information" type="keml:Information"/>
+  <xsd:element ecore:ignore="true" name="InformationLink" type="keml:InformationLink"/>
+  <xsd:complexType name="Conversation">
+    <xsd:sequence>
+      <xsd:element ecore:resolveProxies="true" name="author" type="keml:Author"/>
+      <xsd:element ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="conversationPartners" type="keml:ConversationPartner"/>
+    </xsd:sequence>
+    <xsd:attribute name="title" type="ecore:EString"/>
+  </xsd:complexType>
+  <xsd:complexType name="ConversationPartner">
+    <xsd:annotation>
+      <xsd:documentation>Conversation partners are for example the LLM and a web browser, more or less are possible</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="keml:LifeLine">
+        <xsd:attribute ecore:unsettable="false" name="color" type="ecore:EInt"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="LifeLine">
+    <xsd:annotation>
+      <xsd:documentation>LifeLines are defined by the UML standard as essential parts of a sequence diagram.
+The xPosition positions the life line on the horizontal axis. Vertically, it starts as high as possible.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="name" type="ecore:EString"/>
+    <xsd:attribute ecore:unsettable="false" name="xPosition" type="ecore:EInt"/>
+  </xsd:complexType>
+  <xsd:complexType name="Author">
+    <xsd:annotation>
+      <xsd:documentation>The human main author of the conversation</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="keml:LifeLine">
+        <xsd:sequence>
+          <xsd:element ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="messages" type="keml:Message"/>
+          <xsd:element ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="preknowledge" type="keml:PreKnowledge"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="SendMessage">
+    <xsd:complexContent>
+      <xsd:extension base="keml:Message">
+        <xsd:attribute ecore:opposite="isUsedOn" ecore:reference="keml:Information" name="uses">
+          <xsd:simpleType>
+            <xsd:list itemType="xsd:anyURI"/>
+          </xsd:simpleType>
+        </xsd:attribute>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="ReceiveMessage">
+    <xsd:complexContent>
+      <xsd:extension base="keml:Message">
+        <xsd:sequence>
+          <xsd:element ecore:opposite="source" ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="generates" type="keml:NewInformation"/>
+        </xsd:sequence>
+        <xsd:attribute ecore:unsettable="false" name="isInterrupted" type="ecore:EBoolean"/>
+        <xsd:attribute ecore:opposite="repeatedBy" ecore:reference="keml:Information" name="repeats">
+          <xsd:simpleType>
+            <xsd:list itemType="xsd:anyURI"/>
+          </xsd:simpleType>
+        </xsd:attribute>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="Message">
+    <xsd:attribute name="content" type="ecore:EString"/>
+    <xsd:attribute ecore:unsettable="false" name="timing" type="ecore:EInt"/>
+    <xsd:attribute ecore:reference="keml:ConversationPartner" name="counterPart" type="xsd:anyURI" use="required"/>
+    <xsd:attribute name="originalContent" type="ecore:EString"/>
+  </xsd:complexType>
+  <xsd:complexType name="NewInformation">
+    <xsd:annotation>
+      <xsd:appinfo ecore:key="operations" source="http://www.eclipse.org/emf/2002/Ecore">
+        <operation name="getSourceConversationPartner" type="keml:ConversationPartner"/>
+        <operation name="getTiming" type="ecore:EInt"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="keml:Information">
+        <xsd:attribute ecore:opposite="generates" ecore:reference="keml:ReceiveMessage" name="source" type="xsd:anyURI" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="PreKnowledge">
+    <xsd:complexContent>
+      <xsd:extension base="keml:Information"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="Information">
+    <xsd:sequence>
+      <xsd:element ecore:opposite="source" ecore:resolveProxies="true" maxOccurs="unbounded" minOccurs="0" name="causes" type="keml:InformationLink"/>
+    </xsd:sequence>
+    <xsd:attribute name="message" type="ecore:EString"/>
+    <xsd:attribute ecore:unsettable="false" name="isInstruction" type="ecore:EBoolean"/>
+    <xsd:attribute default="0.75" ecore:unsettable="false" name="initialTrust" type="ecore:EFloat"/>
+    <xsd:attribute default="0.75" ecore:unsettable="false" name="currentTrust" type="ecore:EFloat"/>
+    <xsd:attribute ecore:opposite="repeats" ecore:reference="keml:ReceiveMessage" name="repeatedBy">
+      <xsd:simpleType>
+        <xsd:list itemType="xsd:anyURI"/>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute ecore:opposite="target" ecore:reference="keml:InformationLink" name="targetedBy">
+      <xsd:simpleType>
+        <xsd:list itemType="xsd:anyURI"/>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute ecore:opposite="uses" ecore:reference="keml:SendMessage" name="isUsedOn">
+      <xsd:simpleType>
+        <xsd:list itemType="xsd:anyURI"/>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+  <xsd:simpleType name="InformationLinkType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="SUPPLEMENT"/>
+      <xsd:enumeration value="SUPPORT"/>
+      <xsd:enumeration value="STRONG_SUPPORT"/>
+      <xsd:enumeration value="ATTACK"/>
+      <xsd:enumeration value="STRONG_ATTACK"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="InformationLink">
+    <xsd:attribute name="linkText" type="ecore:EString"/>
+    <xsd:attribute ecore:unsettable="false" name="type" type="keml:InformationLinkType"/>
+    <xsd:attribute ecore:opposite="targetedBy" ecore:reference="keml:Information" name="target" type="xsd:anyURI" use="required"/>
+    <xsd:attribute ecore:opposite="causes" ecore:reference="keml:Information" name="source" type="xsd:anyURI" use="required"/>
+  </xsd:complexType>
+</xsd:schema>

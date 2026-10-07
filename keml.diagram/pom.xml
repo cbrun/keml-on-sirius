@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.keml</groupId>
+        <artifactId>keml.releng</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+        <relativePath>../keml.releng/pom.xml</relativePath>
+    </parent>
+    <artifactId>keml.diagram</artifactId>
+    <name>KEML Sirius Web diagram</name>
+    <dependencies>
+        <!-- The diagram's creation tools reuse the model icons from EMF Edit. -->
+        <dependency>
+            <groupId>org.keml</groupId>
+            <artifactId>keml.edit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.keml</groupId>
+            <artifactId>keml</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.sirius</groupId>
+            <artifactId>sirius-components-view-builder</artifactId>
+            <version>${sirius.web.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.sirius</groupId>
+            <artifactId>sirius-components-view-emf</artifactId>
+            <version>${sirius.web.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.sirius</groupId>
+            <artifactId>sirius-web-application</artifactId>
+            <version>${sirius.web.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

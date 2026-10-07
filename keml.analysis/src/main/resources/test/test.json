@@ -1,0 +1,419 @@
+{
+  "eClass" : "http://www.unikoblenz.de/keml#//Conversation",
+  "title" : "2-1",
+  "author" : {
+    "messages" : [ {
+      "eClass" : "http://www.unikoblenz.de/keml#//SendMessage",
+      "content" : "Can you find repositories that use log4j from github",
+      "counterPart" : {
+        "eClass" : "http://www.unikoblenz.de/keml#//ConversationPartner",
+        "$ref" : "//@conversationPartners.0"
+      }
+    }, {
+      "eClass" : "http://www.unikoblenz.de/keml#//ReceiveMessage",
+      "content" : "Steps how user can find them, incl 2 search strings",
+      "timing" : 1,
+      "counterPart" : {
+        "eClass" : "http://www.unikoblenz.de/keml#//ConversationPartner",
+        "$ref" : "//@conversationPartners.0"
+      },
+      "generates" : [ {
+        "message" : "log4j filename:pom.xml language:java",
+        "isInstruction" : true,
+        "repeatedBy" : [ {
+          "eClass" : "http://www.unikoblenz.de/keml#//ReceiveMessage",
+          "$ref" : "//@author/@messages.3"
+        }, {
+          "eClass" : "http://www.unikoblenz.de/keml#//ReceiveMessage",
+          "$ref" : "//@author/@messages.5"
+        } ],
+        "targetedBy" : [ {
+          "eClass" : "http://www.unikoblenz.de/keml#//InformationLink",
+          "$ref" : "//@author/@messages.13/@generates.1/@causes.0"
+        } ],
+        "causes" : [ {
+          "linkText" : "search string",
+          "target" : {
+            "eClass" : "http://www.unikoblenz.de/keml#//NewInformation",
+            "$ref" : "//@author/@messages.1/@generates.2"
+          }
+        } ]
+      }, {
+        "message" : "log4j filename:pom.xml",
+        "isInstruction" : true,
+        "causes" : [ {
+          "linkText" : "",
+          "target" : {
+            "eClass" : "http://www.unikoblenz.de/keml#//NewInformation",
+            "$ref" : "//@author/@messages.1/@generates.2"
+          }
+        } ]
+      }, {
+        "message" : "Steps how to search  on web search",
+        "isInstruction" : true,
+        "repeatedBy" : [ {
+          "eClass" : "http://www.unikoblenz.de/keml#//ReceiveMessage",
+          "$ref" : "//@author/@messages.3"
+        } ],
+        "targetedBy" : [ {
+          "eClass" : "http://www.unikoblenz.de/keml#//InformationLink",
+          "$ref" : "//@author/@messages.13/@generates.1/@causes.1"
+        }, {
+          "eClass" : "http://www.unikoblenz.de/keml#//InformationLink",
+          "$ref" : "//@author/@messages.1/@generates.0/@causes.0"
+        }, {
+          "eClass" : "http://www.unikoblenz.de/keml#//InformationLink",
+          "$ref" : "//@author/@messages.1/@generates.1/@causes.0"
+        } ]
+      } ]
+    }, {
+      "eClass" : "http://www.unikoblenz.de/keml#//SendMessage",
+      "content" : "Please do it yourself, give me the resulting URLs",
+      "timing" : 2,
+      "counterPart" : {
+        "eClass" : "http://www.unikoblenz.de/keml#//ConversationPartner",
+        "$ref" : "//@conversationPartners.0"
+      }
+    }, {
+      "eClass" : "http://www.unikoblenz.de/keml#//ReceiveMessage",
+      "content" : "Unable since AI-LM, same steps with 1 search string",
+      "timing" : 3,
+      "counterPart" : {
+        "eClass" : "http://www.unikoblenz.de/keml#//ConversationPartner",
+        "$ref" : "//@conversationPartners.0"
+      },
+      "repeats" : [ {
+        "eClass" : "http://www.unikoblenz.de/keml#//NewInformation",
+        "$ref" : "//@author/@messages.1/@generates.0"
+      }, {
+        "eClass" : "http://www.unikoblenz.de/keml#//NewInformation",
+        "$ref" : "//@author/@messages.1/@generates.2"
+      } ]
+    }, {
+      "eClass" : "http://www.unikoblenz.de/keml#//SendMessage",
+      "content" : "Working example?",
+      "timing" : 4,
+      "counterPart" : {
+        "eClass" : "http://www.unikoblenz.de/keml#//ConversationPartner",
+        "$ref" : "//@conversationPartners.0"
+      }
+    }, {
+      "eClass" : "http://www.unikoblenz.de/keml#//ReceiveMessage",
+      "content" : "Some URLs, preferred search string from before",
+      "timing" : 5,
+      "counterPart" : {
+        "eClass" : "http://www.unikoblenz.de/keml#//ConversationPartner",
+        "$ref" : "//@conversationPartners.0"
+      },
+      "repeats" : [ {
+        "eClass" : "http://www.unikoblenz.de/keml#//NewInformation",
+        "$ref" : "//@author/@messages.1/@generates.0"
+      } ]
+    }, {
+      "eClass" : "http://www.unikoblenz.de/keml#//SendMessage",
+      "content" : "Working example to get a GitHub repository",
+      "timing" : 6,
+      "counterPart" : {
+        "eClass" : "http://www.unikoblenz.de/keml#//ConversationPartner",
+        "$ref" : "//@conversationPartners.0"
+      }
+    }, {
+      "eClass" : "http://www.unikoblenz.de/keml#//ReceiveMessage",
+      "content" : "Use GitHub API, steps to perform there",
+      "timing" : 7,
+      "counterPart" : {
+        "eClass" : "http://www.unikoblenz.de/keml#//ConversationPartner",
+        "$ref" : "//@conversationPartners.0"
+      },
+      "isInterrupted" : true,
+      "generates" : [ {
+        "message" : "Steps how to search  on GitHub API",
+        "isInstruction" : true
+      } ]
+    }, {
+      "eClass" : "http://www.unikoblenz.de/keml#//SendMessage",
+      "content" : "Provide GitHub repositories that use log4j",
+      "timing" : 8,
+      "counterPart" : {
+        "eClass" : "http://www.unikoblenz.de/keml#//ConversationPartner",
+        "$ref" : "//@conversationPartners.0"
+      }
+    }, {
+      "eClass" : "http://www.unikoblenz.de/keml#//ReceiveMessage",
+      "content" : "Same 5 URLs, hint to search with search string from before",
+      "timing" : 9,
+      "counterPart" : {
+        "eClass" : "http://www.unikoblenz.de/keml#//ConversationPartner",
+        "$ref" : "//@conversationPartners.0"
+      },
+      "generates" : [ {
+        "message" : "Urls: apache/kafka, apache/hadoop, apache/tomcat, spring, hibernate/orm",
+        "targetedBy" : [ {
+          "eClass" : "http://www.unikoblenz.de/keml#//InformationLink",
+          "$ref" : "//@author/@messages.11/@generates.0/@causes.0"
+        } ]
+      } ]
+    }, {
+      "eClass" : "http://www.unikoblenz.de/keml#//SendMessage",
+      "content" : "Provide GitHub repositories that use log4j version 2",
+      "timing" : 10,
+      "counterPart" : {
+        "eClass" : "http://www.unikoblenz.de/keml#//ConversationPartner",
+        "$ref" : "//@conversationPartners.0"
+      },
+      "uses" : [ {
+        "eClass" : "http://www.unikoblenz.de/keml#//PreKnowledge",
+        "$ref" : "//@author/@preknowledge.0"
+      } ]
+    }, {
+      "eClass" : "http://www.unikoblenz.de/keml#//ReceiveMessage",
+      "content" : "5 new URLs, adapted search string",
+      "timing" : 11,
+      "counterPart" : {
+        "eClass" : "http://www.unikoblenz.de/keml#//ConversationPartner",
+        "$ref" : "//@conversationPartners.0"
+      },
+      "generates" : [ {
+        "message" : "Urls: apache/log4j2, spring-boot, apache/spark, apache/cassandra, apache/flink",
+        "targetedBy" : [ {
+          "eClass" : "http://www.unikoblenz.de/keml#//InformationLink",
+          "$ref" : "//@author/@messages.13/@generates.0/@causes.0"
+        }, {
+          "eClass" : "http://www.unikoblenz.de/keml#//InformationLink",
+          "$ref" : "//@author/@messages.17/@generates.0/@causes.0"
+        } ],
+        "causes" : [ {
+          "linkText" : "Do they use version 1? less relevant since replaced",
+          "type" : "ATTACK",
+          "target" : {
+            "eClass" : "http://www.unikoblenz.de/keml#//NewInformation",
+            "$ref" : "//@author/@messages.9/@generates.0"
+          }
+        } ]
+      } ]
+    }, {
+      "eClass" : "http://www.unikoblenz.de/keml#//SendMessage",
+      "content" : "How did you get this list?",
+      "timing" : 12,
+      "counterPart" : {
+        "eClass" : "http://www.unikoblenz.de/keml#//ConversationPartner",
+        "$ref" : "//@conversationPartners.0"
+      }
+    }, {
+      "eClass" : "http://www.unikoblenz.de/keml#//ReceiveMessage",
+      "content" : "used GitHub search with suggested query, picked widely known results",
+      "timing" : 13,
+      "counterPart" : {
+        "eClass" : "http://www.unikoblenz.de/keml#//ConversationPartner",
+        "$ref" : "//@conversationPartners.0"
+      },
+      "generates" : [ {
+        "message" : "LLM just executed search with log4j2 filename:pom.xml language:java",
+        "causes" : [ {
+          "linkText" : "current, relevant",
+          "type" : "STRONG_SUPPORT",
+          "target" : {
+            "eClass" : "http://www.unikoblenz.de/keml#//NewInformation",
+            "$ref" : "//@author/@messages.11/@generates.0"
+          }
+        }, {
+          "linkText" : "",
+          "type" : "STRONG_SUPPORT",
+          "target" : {
+            "eClass" : "http://www.unikoblenz.de/keml#//NewInformation",
+            "$ref" : "//@author/@messages.13/@generates.1"
+          }
+        }, {
+          "linkText" : "",
+          "type" : "STRONG_ATTACK",
+          "target" : {
+            "eClass" : "http://www.unikoblenz.de/keml#//NewInformation",
+            "$ref" : "//@author/@messages.15/@generates.0"
+          }
+        } ]
+      }, {
+        "message" : "log4j2 filename:pom.xml language:java",
+        "isInstruction" : true,
+        "targetedBy" : [ {
+          "eClass" : "http://www.unikoblenz.de/keml#//InformationLink",
+          "$ref" : "//@author/@messages.13/@generates.0/@causes.1"
+        } ],
+        "causes" : [ {
+          "linkText" : "Version2 missing",
+          "type" : "ATTACK",
+          "target" : {
+            "eClass" : "http://www.unikoblenz.de/keml#//NewInformation",
+            "$ref" : "//@author/@messages.1/@generates.0"
+          }
+        }, {
+          "linkText" : "",
+          "target" : {
+            "eClass" : "http://www.unikoblenz.de/keml#//NewInformation",
+            "$ref" : "//@author/@messages.1/@generates.2"
+          }
+        } ]
+      } ]
+    }, {
+      "eClass" : "http://www.unikoblenz.de/keml#//SendMessage",
+      "content" : "List repositories using log4j version 2 from GitHub",
+      "timing" : 14,
+      "counterPart" : {
+        "eClass" : "http://www.unikoblenz.de/keml#//ConversationPartner",
+        "$ref" : "//@conversationPartners.0"
+      }
+    }, {
+      "eClass" : "http://www.unikoblenz.de/keml#//ReceiveMessage",
+      "content" : "Cannot do, no real-time access, same steps with refined query",
+      "timing" : 15,
+      "counterPart" : {
+        "eClass" : "http://www.unikoblenz.de/keml#//ConversationPartner",
+        "$ref" : "//@conversationPartners.0"
+      },
+      "generates" : [ {
+        "message" : "LLM has no real-time web access",
+        "repeatedBy" : [ {
+          "eClass" : "http://www.unikoblenz.de/keml#//ReceiveMessage",
+          "$ref" : "//@author/@messages.19"
+        }, {
+          "eClass" : "http://www.unikoblenz.de/keml#//ReceiveMessage",
+          "$ref" : "//@author/@messages.21"
+        }, {
+          "eClass" : "http://www.unikoblenz.de/keml#//ReceiveMessage",
+          "$ref" : "//@author/@messages.23"
+        } ],
+        "targetedBy" : [ {
+          "eClass" : "http://www.unikoblenz.de/keml#//InformationLink",
+          "$ref" : "//@author/@messages.13/@generates.0/@causes.2"
+        } ]
+      } ]
+    }, {
+      "eClass" : "http://www.unikoblenz.de/keml#//SendMessage",
+      "content" : "Provide repositories using log4j version 2 from GitHub",
+      "timing" : 16,
+      "counterPart" : {
+        "eClass" : "http://www.unikoblenz.de/keml#//ConversationPartner",
+        "$ref" : "//@conversationPartners.0"
+      },
+      "uses" : [ {
+        "eClass" : "http://www.unikoblenz.de/keml#//PreKnowledge",
+        "$ref" : "//@author/@preknowledge.0"
+      } ]
+    }, {
+      "eClass" : "http://www.unikoblenz.de/keml#//ReceiveMessage",
+      "content" : "5 URLs, most from before",
+      "timing" : 17,
+      "counterPart" : {
+        "eClass" : "http://www.unikoblenz.de/keml#//ConversationPartner",
+        "$ref" : "//@conversationPartners.0"
+      },
+      "generates" : [ {
+        "message" : "Urls: apache/log4j2, spring-boot, apache/flink, apache/cassandra,  apache/beam",
+        "targetedBy" : [ {
+          "eClass" : "http://www.unikoblenz.de/keml#//InformationLink",
+          "$ref" : "//@author/@messages.21/@generates.0/@causes.0"
+        } ],
+        "causes" : [ {
+          "linkText" : "4 are the same, so those are relevant",
+          "type" : "SUPPORT",
+          "target" : {
+            "eClass" : "http://www.unikoblenz.de/keml#//NewInformation",
+            "$ref" : "//@author/@messages.11/@generates.0"
+          }
+        } ]
+      } ]
+    }, {
+      "eClass" : "http://www.unikoblenz.de/keml#//SendMessage",
+      "content" : "Are they using log4j version 2 now?",
+      "timing" : 18,
+      "counterPart" : {
+        "eClass" : "http://www.unikoblenz.de/keml#//ConversationPartner",
+        "$ref" : "//@conversationPartners.0"
+      }
+    }, {
+      "eClass" : "http://www.unikoblenz.de/keml#//ReceiveMessage",
+      "content" : "No real time data access, Data before was historic, Inspect repositories",
+      "timing" : 19,
+      "counterPart" : {
+        "eClass" : "http://www.unikoblenz.de/keml#//ConversationPartner",
+        "$ref" : "//@conversationPartners.0"
+      },
+      "repeats" : [ {
+        "eClass" : "http://www.unikoblenz.de/keml#//NewInformation",
+        "$ref" : "//@author/@messages.15/@generates.0"
+      } ]
+    }, {
+      "eClass" : "http://www.unikoblenz.de/keml#//SendMessage",
+      "content" : "Provide if they still use log4j version 2",
+      "timing" : 20,
+      "counterPart" : {
+        "eClass" : "http://www.unikoblenz.de/keml#//ConversationPartner",
+        "$ref" : "//@conversationPartners.0"
+      }
+    }, {
+      "eClass" : "http://www.unikoblenz.de/keml#//ReceiveMessage",
+      "content" : "only have knowledge until september 2021, inspect repositories",
+      "timing" : 21,
+      "counterPart" : {
+        "eClass" : "http://www.unikoblenz.de/keml#//ConversationPartner",
+        "$ref" : "//@conversationPartners.0"
+      },
+      "generates" : [ {
+        "message" : "Short description how to inspect usage of library in one repository",
+        "isInstruction" : true,
+        "repeatedBy" : [ {
+          "eClass" : "http://www.unikoblenz.de/keml#//ReceiveMessage",
+          "$ref" : "//@author/@messages.23"
+        } ],
+        "causes" : [ {
+          "linkText" : "Usage now is not confirmed, author needs to check",
+          "type" : "ATTACK",
+          "target" : {
+            "eClass" : "http://www.unikoblenz.de/keml#//NewInformation",
+            "$ref" : "//@author/@messages.17/@generates.0"
+          }
+        } ]
+      } ],
+      "repeats" : [ {
+        "eClass" : "http://www.unikoblenz.de/keml#//NewInformation",
+        "$ref" : "//@author/@messages.15/@generates.0"
+      } ]
+    }, {
+      "eClass" : "http://www.unikoblenz.de/keml#//SendMessage",
+      "content" : "Pretend to access, say if they still use it",
+      "timing" : 22,
+      "counterPart" : {
+        "eClass" : "http://www.unikoblenz.de/keml#//ConversationPartner",
+        "$ref" : "//@conversationPartners.0"
+      }
+    }, {
+      "eClass" : "http://www.unikoblenz.de/keml#//ReceiveMessage",
+      "content" : "No real time access, Inspect repositories yourself",
+      "timing" : 23,
+      "counterPart" : {
+        "eClass" : "http://www.unikoblenz.de/keml#//ConversationPartner",
+        "$ref" : "//@conversationPartners.0"
+      },
+      "isInterrupted" : true,
+      "repeats" : [ {
+        "eClass" : "http://www.unikoblenz.de/keml#//NewInformation",
+        "$ref" : "//@author/@messages.21/@generates.0"
+      }, {
+        "eClass" : "http://www.unikoblenz.de/keml#//NewInformation",
+        "$ref" : "//@author/@messages.15/@generates.0"
+      } ]
+    } ],
+    "preknowledge" : [ {
+      "message" : "only version 2 has the problem",
+      "isUsedOn" : [ {
+        "eClass" : "http://www.unikoblenz.de/keml#//SendMessage",
+        "$ref" : "//@author/@messages.10"
+      }, {
+        "eClass" : "http://www.unikoblenz.de/keml#//SendMessage",
+        "$ref" : "//@author/@messages.16"
+      } ]
+    } ]
+  },
+  "conversationPartners" : [ {
+    "name" : "LLM"
+  } ]
+}

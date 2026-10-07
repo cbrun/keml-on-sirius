@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.keml</groupId>
+        <artifactId>keml.releng</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+        <relativePath>../keml.releng/pom.xml</relativePath>
+    </parent>
+    <artifactId>keml.io</artifactId>
+    <name>KEML file I/O</name>
+    <dependencies>
+        <dependency><groupId>org.keml</groupId><artifactId>keml</artifactId></dependency>
+        <dependency><groupId>com.fasterxml.jackson.core</groupId><artifactId>jackson-databind</artifactId></dependency>
+        <dependency><groupId>com.fasterxml.jackson.dataformat</groupId><artifactId>jackson-dataformat-xml</artifactId></dependency>
+        <dependency><groupId>org.json</groupId><artifactId>json</artifactId><version>20240303</version></dependency>
+        <dependency><groupId>org.eclipse.emfcloud</groupId><artifactId>emfjson-jackson</artifactId><version>2.2.0</version></dependency>
+        <dependency><groupId>org.eclipse.emf</groupId><artifactId>org.eclipse.emf.ecore.xmi</artifactId><version>2.39.0</version></dependency>
+        <dependency><groupId>commons-io</groupId><artifactId>commons-io</artifactId><version>2.18.0</version></dependency>
+    </dependencies>
+    <build><sourceDirectory>src</sourceDirectory></build>
+</project>

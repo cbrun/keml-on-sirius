@@ -1,0 +1,5 @@
+package keml.io.graphml;
+
+public enum NodeType {
+	MESSAGE, AUTHOR, CONVERSATION_PARTNER, NEW_INFORMATION, PRE_KNOWLEDGE, INTERRUPT;
+}

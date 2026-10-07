@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.keml</groupId><artifactId>keml.releng</artifactId><version>0.1.0-SNAPSHOT</version>
+        <relativePath>../keml.releng/pom.xml</relativePath>
+    </parent>
+    <artifactId>keml.frontend</artifactId>
+    <name>KEML Sirius Web frontend extensions</name>
+    <!-- Package the custom workbench as classpath assets for Spring Boot. -->
+    <build>
+        <resources>
+            <resource><directory>target/frontend</directory><targetPath>static</targetPath></resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId><artifactId>maven-dependency-plugin</artifactId>
+                <executions><execution><id>sirius-base-styles</id><phase>generate-resources</phase><goals><goal>unpack</goal></goals>
+                    <configuration><artifactItems><artifactItem>
+                        <groupId>org.eclipse.sirius</groupId><artifactId>sirius-web-frontend</artifactId><version>${sirius.web.version}</version>
+                        <outputDirectory>${project.build.directory}/upstream</outputDirectory>
+                        <includes>static/assets/**</includes><excludes>**/*.js</excludes>
+                    </artifactItem></artifactItems></configuration>
+                </execution></executions>
+            </plugin>
+            <plugin>
+                <groupId>com.github.eirslett</groupId><artifactId>frontend-maven-plugin</artifactId><version>1.15.1</version>
+                <configuration><nodeVersion>v24.18.1</nodeVersion><installDirectory>target</installDirectory></configuration>
+                <executions>
+                    <execution><id>install-node</id><goals><goal>install-node-and-npm</goal></goals><phase>generate-resources</phase></execution>
+                    <execution><id>npm-ci</id><goals><goal>npm</goal></goals><phase>generate-resources</phase><configuration><arguments>ci --no-audit --no-fund</arguments></configuration></execution>
+                    <execution><id>build-ui</id><goals><goal>npm</goal></goals><phase>generate-resources</phase><configuration><arguments>run build</arguments></configuration></execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <!-- Eclipse imports the module; run the reactor explicitly to rebuild frontend assets. -->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId><artifactId>lifecycle-mapping</artifactId><version>1.0.0</version>
+                    <configuration><lifecycleMappingMetadata><pluginExecutions><pluginExecution>
+                        <pluginExecutionFilter><groupId>com.github.eirslett</groupId><artifactId>frontend-maven-plugin</artifactId><versionRange>[1.15.1,)</versionRange><goals><goal>install-node-and-npm</goal><goal>npm</goal></goals></pluginExecutionFilter>
+                        <action><ignore/></action>
+                    </pluginExecution></pluginExecutions></lifecycleMappingMetadata></configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

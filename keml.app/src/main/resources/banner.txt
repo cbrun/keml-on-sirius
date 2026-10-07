@@ -1,0 +1,10 @@
+ _  __ _____ __  __ _
+| |/ /| ____|  \/  | |
+| ' / |  _| | |\/| | |
+| . \ | |___| |  | | |___
+|_|\_\|_____|_|  |_|_____|
+
+ KEML - Sirius Web sample application
+ Conversation timelines and knowledge graphs
+ :: Spring Boot :: ${spring-boot.formatted-version}
+

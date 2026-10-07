@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.keml</groupId>
+        <artifactId>keml.releng</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+        <relativePath>../keml.releng/pom.xml</relativePath>
+    </parent>
+    <artifactId>keml.app</artifactId>
+    <name>KEML Sirius Web sample application</name>
+
+    <dependencies>
+        <!-- The starter supplies the server, GraphQL, persistence and workbench services. -->
+        <dependency>
+            <groupId>org.eclipse.sirius</groupId>
+            <artifactId>sirius-web-starter</artifactId>
+            <version>${sirius.web.version}</version>
+        </dependency>
+        <!-- Our frontend reuses Sirius Web's UI and adds the KEML analysis dialog. -->
+        <dependency>
+            <groupId>org.keml</groupId>
+            <artifactId>keml.frontend</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.keml</groupId>
+            <artifactId>keml.diagram</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.keml</groupId>
+            <artifactId>keml.analysis</artifactId>
+        </dependency>
+        <!-- Generated EMF item providers supply explorer labels, icons and properties. -->
+        <dependency>
+            <groupId>org.keml</groupId>
+            <artifactId>keml.edit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>keml</finalName>
+        <plugins>
+            <!-- Inherited repackage execution creates a JAR runnable with java -jar. -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build-info</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

@@ -1,0 +1,4 @@
+# The runtime image needs only the JAR; exclude sources and IDE files from its build context.
+**
+!target/
+!target/keml.jar

@@ -1,0 +1,3 @@
+/* Keep the browser workbench full-height, including when launched directly on a project URL. */
+html, body, #root { min-height: 100%; }
+body { margin: 0; }

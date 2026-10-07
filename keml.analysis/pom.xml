@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.keml</groupId>
+        <artifactId>keml.releng</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+        <relativePath>../keml.releng/pom.xml</relativePath>
+    </parent>
+    <artifactId>keml.analysis</artifactId>
+    <name>KEML analysis</name>
+    <description>Reusable conversation statistics and trust reports.</description>
+    <dependencies>
+        <dependency>
+            <groupId>org.keml</groupId>
+            <artifactId>keml.io</artifactId>
+        </dependency>
+        <!-- The upstream REST launcher remains available, but this module is a plain JAR by default. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-csv</artifactId>
+            <version>1.10.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>5.2.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.javatuples</groupId>
+            <artifactId>javatuples</artifactId>
+            <version>1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <build>
+        <finalName>kemlanalysisserver</finalName>
+        <resources>
+            <resource><directory>src/main/resources</directory></resource>
+            <!-- Retain the optional Python scripts for consumers of the library. -->
+            <resource>
+                <directory>src/main/java/keml/analysis/py</directory>
+                <targetPath>keml/analysis/py</targetPath>
+            </resource>
+        </resources>
+    </build>
+    <profiles>
+        <profile>
+            <id>analysis-server</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <mainClass>keml.analysis_server.KemlAnalysisServerApplication</mainClass>
+                            <!-- Keep the normal JAR usable as a dependency of keml.app. -->
+                            <classifier>server</classifier>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

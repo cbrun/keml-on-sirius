@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Analysis
+Bundle-SymbolicName: keml.analysis
+Bundle-Version: 1.0.0.qualifier
+Require-Bundle: org.eclipse.emf.ecore;bundle-version="2.35.0",
+ org.eclipse.core.runtime,
+ org.apache.commons.commons-io,
+ org.eclipse.emf.edit;visibility:=reexport,
+ keml;visibility:=reexport
+Import-Package: keml,
+ keml.io,
+ org.eclipse.emf.ecore.xmi.impl;version="2.36.0"
+Automatic-Module-Name: keml.analysis
+Bundle-RequiredExecutionEnvironment: JavaSE-21
+Export-Package: keml.analysis

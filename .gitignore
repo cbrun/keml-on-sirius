@@ -1,0 +1,50 @@
+# Maven and Eclipse build outputs
+target/
+bin/
+*.class
+*.log
+hs_err_pid*
+replay_pid*
+
+# Eclipse/m2e workspace state; keep .project and shared .launch files
+.classpath
+.settings/
+.metadata/
+.recommenders/
+
+# Other IDE state
+.idea/
+*.iml
+
+# Frontend dependencies and generated output; keep package-lock.json and .npmrc
+node_modules/
+dist/
+.vite/
+coverage/
+*.tsbuildinfo
+
+# Python caches and virtual environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local environment overrides; keep reusable examples
+.env
+.env.*
+!.env.example
+!.env.sample
+
+# Operating-system and editor temporary files
+.DS_Store
+Thumbs.db
+Desktop.ini
+*~
+*.swp
+*.swo
+
+# src-gen/ is intentionally versioned: Maven compiles the generated EMF model
+# and the Edit providers contain customizations marked @generated NOT.

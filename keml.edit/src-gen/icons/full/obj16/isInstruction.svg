@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#202124" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <title>Instruction</title>
+  <path d="M3 3h18v18H3Z" fill="#ccffff"/><path d="M12 6v8" stroke-width="2.5"/><circle cx="12" cy="18" r="1" fill="#202124"/>
+</svg>

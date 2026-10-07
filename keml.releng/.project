@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+    <name>keml.releng</name>
+    <comment>Parent Maven reactor and container setup for KEML</comment>
+    <projects/>
+    <buildSpec>
+        <buildCommand>
+            <name>org.eclipse.m2e.core.maven2Builder</name>
+            <arguments/>
+        </buildCommand>
+    </buildSpec>
+    <natures>
+        <nature>org.eclipse.m2e.core.maven2Nature</nature>
+    </natures>
+</projectDescription>
