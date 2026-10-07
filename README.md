@@ -88,3 +88,40 @@ See the [application README](keml.releng/README.md) for prerequisites, Eclipse
 import, Docker and Java launch instructions, and implementation examples.
 The [upstream repository revisions](keml.releng/README.md#source-repositories-and-baseline-commits)
 record the origins of the pre-existing code before repository consolidation.
+
+## Continuous integration and application downloads
+
+The [Build and test workflow](.github/workflows/build.yml) runs on pushes to
+`main`, pull requests and manual dispatch. It builds the complete Maven reactor
+with Java 21, runs the Java tests, and type-checks and bundles the frontend.
+Test failures fail the build; test reports are uploaded even when the build fails.
+
+To download the Java application, open the repository's
+[Actions page](https://github.com/cbrun/keml-on-sirius/actions/workflows/build.yml),
+select a successful **Build and test** run, and download the
+**keml-java-application** artifact from its summary or **Artifacts** section.
+Extract the ZIP to obtain `keml.jar`. Artifacts are retained for 30 days;
+the **test-reports** artifact contains the Maven test results.
+[GitHub requires you to sign in to download workflow artifacts](https://docs.github.com/en/actions/managing-workflow-runs-and-deployments/managing-workflow-runs/downloading-workflow-artifacts).
+
+The downloaded application includes its frontend and dependencies. You need
+Java 21 and PostgreSQL to run it; Maven and Node are only needed to build it.
+Start the sample database using the checked-out Compose configuration, then
+launch the downloaded JAR:
+
+```sh
+docker compose -f keml.releng/docker-compose.yml up -d database
+java -jar /path/to/keml.jar --spring.profiles.active=dev
+```
+
+Open <http://localhost:8080>. See the
+[launch documentation](keml.releng/README.md#run-with-java-or-eclipse) for database
+configuration when running elsewhere.
+
+The workflow authenticates to the Sirius Maven and npm registries with the
+automatic `GITHUB_TOKEN`, granting only `contents: read` and `packages: read`.
+If your dependencies require additional package access, configure the repository
+secret **PACKAGES_READ_TOKEN** with a personal access token (classic) with
+`read:packages`, and the repository variable **PACKAGES_USERNAME** with its
+owner's GitHub username. These optional values override the automatic credentials.
+See [GitHub's package authentication documentation](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry#authenticating-in-a-github-actions-workflow).

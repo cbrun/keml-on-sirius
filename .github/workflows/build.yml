@@ -1,0 +1,89 @@
+name: Build and test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build, test and package
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      # Public Sirius packages use the automatic token. Optional overrides also
+      # support installations with restricted GitHub Packages access.
+      PACKAGES_USERNAME: ${{ vars.PACKAGES_USERNAME || github.actor }}
+      PACKAGES_TOKEN: ${{ secrets.PACKAGES_READ_TOKEN || github.token }}
+      NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_READ_TOKEN || github.token }}
+
+    steps:
+      - name: Check out sources
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Java 21 and Maven
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+          cache-dependency-path: '**/pom.xml'
+          # Match both repository IDs declared by the parent POM. Credentials
+          # are referenced through environment variables, not stored in Git.
+          mvn-server-credentials: |
+            github-sirius-web:PACKAGES_USERNAME:PACKAGES_TOKEN
+            github-sirius-emfjson:PACKAGES_USERNAME:PACKAGES_TOKEN
+
+      - name: Configure npm package authentication
+        # Maven installs Node and runs npm itself; no separate frontend job is needed.
+        run: printf '%s\n' '//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}' > "$RUNNER_TEMP/keml-npmrc"
+
+      - name: Build and test the complete reactor
+        env:
+          NPM_CONFIG_USERCONFIG: ${{ runner.temp }}/keml-npmrc
+        run: mvn --batch-mode --no-transfer-progress -f keml.releng/pom.xml clean verify
+
+      - name: Upload test reports
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-reports
+          path: |
+            **/target/surefire-reports/**
+            **/target/failsafe-reports/**
+          if-no-files-found: ignore
+          retention-days: 30
+
+      - name: Upload the Java application
+        id: application
+        uses: actions/upload-artifact@v7
+        with:
+          name: keml-java-application
+          path: keml.app/target/keml.jar
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+
+      - name: Add the application download to the build summary
+        env:
+          APPLICATION_URL: ${{ steps.application.outputs.artifact-url }}
+        run: |
+          cat >> "$GITHUB_STEP_SUMMARY" <<EOF
+          ## Java application
+
+          [Download keml-java-application]($APPLICATION_URL)
+
+          Extract the archive to get **keml.jar**. Java 21 and PostgreSQL are required.
+          See the repository README for database setup and launch instructions.
+          EOF
