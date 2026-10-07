@@ -237,9 +237,32 @@ Build the whole Maven reactor before running the frontend separately. Then use
 `cd keml.frontend && npm start` for Vite development; its `/api` proxy targets the
 Java app on port 8080, including subscriptions. Use `npm run build` for standalone
 frontend type-checking/bundling once the reactor has extracted the base styles.
-All Sirius npm packages are pinned to the same version as the backend. When
+The frontend build also runs the cylinder geometry checks using Node's built-in
+test runner. All Sirius npm packages are pinned to the same version as the backend. When
 upgrading Sirius, update those versions and the lockfile together with the parent
 POM. The build reuses the matching published frontend's global CSS and fonts.
+
+### Contributing the pre-knowledge cylinder
+
+`KemlViews` keeps the existing `PreKnowledgeNode` description and palettes, but
+uses `keml:cylinder` as an image-style marker. `CylinderNodeStyleProvider` handles
+that marker before Sirius's ordinary image provider, returning a custom runtime
+style and node type. The module's `schema/keml-cylinder.graphqls` extends the
+GraphQL style union, and the same provider registers a deserializer so the style
+survives saving and reopening diagrams. No extension of the Ecore or View
+metamodel is needed. The old SVG asset remains available for previously saved
+image-style nodes until they refresh.
+
+`CylinderContribution.ts` extends Sirius's diagram subscription to request the
+custom style and delegates ordinary node conversion to the native converter.
+`CylinderNode.tsx` supplies the React renderer through
+`DiagramRepresentationConfiguration` in `main.tsx`, retaining Sirius's label
+editing, palette actions, resizing and connection controls. The shared geometry
+in `CylinderGeometry.ts` draws the caps, bounds the label inside the body, and
+projects edge endpoints onto the outline. Text wraps with a multiline ellipsis;
+resizing reveals more text, hovering shows the complete label, and direct edit
+always uses the original message. The post-processor only imposes anchors on
+lifelines and messages; knowledge edges preserve their saved anchor positions.
 
 The optional Python comparison/histogram step is not invoked by the embedded
 provider and the sample Docker image does not need Python. The upstream Python

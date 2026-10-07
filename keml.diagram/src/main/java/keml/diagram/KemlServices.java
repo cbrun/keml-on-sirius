@@ -80,7 +80,9 @@ public class KemlServices {
     public String kemlInformationLabel(Information information) {
         String kind = information.isIsInstruction() ? "Instruction" : information instanceof PreKnowledge ? "Pre-knowledge" : "Knowledge";
         String trust = information.getCurrentTrust() == null ? "" : " · trust " + Math.round(information.getCurrentTrust() * 100) + "%";
-        return kind + trust + "\n" + this.compact(information.getMessage(), 200);
+        // The cylinder truncates visually, so resizing it can reveal the full message.
+        return kind + trust + "\n" + (information instanceof PreKnowledge
+                ? Objects.requireNonNullElse(information.getMessage(), "").strip() : this.compact(information.getMessage(), 200));
     }
 
     public int kemlKnowledgeHeight(Information information) {

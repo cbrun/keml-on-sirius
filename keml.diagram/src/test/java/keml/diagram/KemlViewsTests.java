@@ -82,7 +82,7 @@ class KemlViewsTests {
         assertThat(this.getClass().getResource(template.imageURL())).as("Packaged project-template thumbnail").isNotNull();
         this.evaluate(conversation, diagram.getTitleExpression());
         for (var node : diagram.getNodeDescriptions()) {
-            if (node.getStyle() instanceof ImageNodeStyleDescription image) {
+            if (node.getStyle() instanceof ImageNodeStyleDescription image && !CylinderNodeStyleProvider.SHAPE.equals(image.getShape())) {
                 assertThat(this.getClass().getResource(image.getShape())).as("Packaged SVG %s", image.getShape()).isNotNull();
                 assertThat(new KemlDiagramConfiguration().kemlImagePaths().getPaths()).anyMatch(image.getShape()::startsWith);
             }
@@ -137,6 +137,10 @@ class KemlViewsTests {
         var knowledge = KemlFactory.eINSTANCE.createNewInformation();
         knowledge.setMessage(preknowledge.getMessage());
         var store = diagram.getNodeDescriptions().stream().filter(node -> "PreKnowledgeNode".equals(node.getName())).findFirst().orElseThrow();
+        assertThat(new CylinderNodeStyleProvider().getNodeType(store.getStyle())).contains(CylinderNodeStyleProvider.NODE_TYPE);
+        preknowledge.setMessage("Long knowledge with explicit newlines\n".repeat(30));
+        assertThat(this.services.kemlInformationLabel(preknowledge)).contains(preknowledge.getMessage().strip());
+        preknowledge.setMessage(knowledge.getMessage());
         assertThat(this.evaluate(preknowledge, store.getDefaultWidthExpression()).asInt().orElseThrow()).isEqualTo(390);
         assertThat(this.evaluate(preknowledge, store.getDefaultHeightExpression()).asInt().orElseThrow()).isEqualTo(this.services.kemlKnowledgeHeight(knowledge) * 3 / 2);
     }

@@ -4,18 +4,25 @@ import {
   TREE_REPRESENTATION_KIND,
   treeItemContextMenuEntryOverrideExtensionPoint,
 } from '@eclipse-sirius/sirius-components-trees';
-import { SiriusWebApplication } from '@eclipse-sirius/sirius-web-application';
+import { SiriusWebApplication, DiagramRepresentationConfiguration, apolloClientOptionsConfigurersExtensionPoint } from '@eclipse-sirius/sirius-web-application';
 import { WidgetContribution, widgetContributionExtensionPoint } from '@eclipse-sirius/sirius-components-forms';
 import { PaletteToolOverriddenContributionProps, paletteToolOverrideExtensionPoint } from '@eclipse-sirius/sirius-components-palette';
 import { createRoot } from 'react-dom/client';
 import { AnalyseConversationMenu, AnalyseConversationPaletteTool } from './AnalysisDialog';
 import { trustWidgetContribution } from './TrustPropertySection';
+import { cylinderDocumentTransform } from './CylinderContribution';
+import { cylinderNodeRegistry } from './CylinderNode';
 import '@xyflow/react/dist/style.css';
 import '@sirius-base-style';
 import './styles.css';
 
 // Contributions extend the published workbench. Preserve Sirius's existing menu entries.
 const registry = new ExtensionRegistry();
+registry.putData(apolloClientOptionsConfigurersExtensionPoint, {
+  identifier: 'keml-cylinder-style', data: [(options) => ({ ...options,
+    documentTransform: options.documentTransform?.concat(cylinderDocumentTransform) ?? cylinderDocumentTransform,
+  })],
+});
 registry.putData<WidgetContribution[]>(widgetContributionExtensionPoint, {
   identifier: 'keml-trust-widget', data: [trustWidgetContribution],
 });
@@ -29,7 +36,7 @@ registry.putData<PaletteToolOverriddenContributionProps[]>(paletteToolOverrideEx
 });
 const mergeStrategy: ExtensionRegistryMergeStrategy = {
   mergeComponentExtensions: (_id, existing, added) => [...existing, ...added],
-  mergeDataExtensions: (id, existing, added) => [treeItemContextMenuEntryOverrideExtensionPoint.identifier, paletteToolOverrideExtensionPoint.identifier, widgetContributionExtensionPoint.identifier].includes(id)
+  mergeDataExtensions: (id, existing, added) => [treeItemContextMenuEntryOverrideExtensionPoint.identifier, paletteToolOverrideExtensionPoint.identifier, widgetContributionExtensionPoint.identifier, apolloClientOptionsConfigurersExtensionPoint.identifier].includes(id)
     ? { identifier: added.identifier, data: [...existing.data, ...added.data] }
     : added,
 };
@@ -39,5 +46,7 @@ const httpOrigin = window.location.origin;
 const wsOrigin = httpOrigin.replace(/^http/, 'ws');
 createRoot(document.getElementById('root')!).render(
   <SiriusWebApplication httpOrigin={httpOrigin} wsOrigin={wsOrigin}
-    extensionRegistry={registry} extensionRegistryMergeStrategy={mergeStrategy} />
+    extensionRegistry={registry} extensionRegistryMergeStrategy={mergeStrategy}>
+    <DiagramRepresentationConfiguration nodeTypeRegistry={cylinderNodeRegistry} />
+  </SiriusWebApplication>
 );

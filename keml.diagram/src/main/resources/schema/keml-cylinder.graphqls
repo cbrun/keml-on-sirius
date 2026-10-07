@@ -1,0 +1,9 @@
+extend union INodeStyle = CylinderNodeStyle
+
+type CylinderNodeStyle {
+  background: String!
+  borderColor: String!
+  borderSize: Int!
+  borderStyle: LineStyle!
+  childrenLayoutStrategy: ILayoutStrategy!
+}

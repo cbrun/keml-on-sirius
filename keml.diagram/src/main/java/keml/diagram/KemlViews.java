@@ -201,7 +201,7 @@ public class KemlViews {
                 .insideLabel(this.knowledgeLabel())
                 .palette(this.diagrams.newNodePalette().labelEditTool(this.editLabel("message")).deleteTool(this.delete()).build());
         if (store) {
-            builder.style(this.diagrams.newImageNodeStyleDescription().shape("/images/keml/knowledge-store.svg").borderColor(this.grey).borderSize(0).build());
+            builder.style(this.diagrams.newImageNodeStyleDescription().shape(CylinderNodeStyleProvider.SHAPE).borderColor(this.grey).borderSize(1).build());
         } else {
             builder.style(this.diagrams.newRectangularNodeStyleDescription().background(this.yellow).borderColor(this.grey).borderSize(1).borderRadius(0).build())
                     .conditionalStyles(this.diagrams.newConditionalNodeStyle().condition("aql:self.isInstruction")

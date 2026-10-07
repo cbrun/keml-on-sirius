@@ -22,9 +22,14 @@ knowledge graph:
 * **From an Ecore metamodel to a web application:** reuse an existing EMF model,
   its generated Java code and Edit providers to supply model creation, labels,
   icons and editable properties in Sirius Web.
-* **SVG images throughout the editor:** vector shapes for participants and
-  pre-knowledge, plus distinct model and creation-tool icons. Support and attack
+* **SVG images throughout the editor:** vector shapes for participants,
+  plus distinct model and creation-tool icons. Support and attack
   links have matching green/red icons, including variants for strong links.
+* **A programmatic custom diagram node:** pre-knowledge uses a cylinder drawn
+  at its current size, with a wrapped label and multiline ellipsis inside its
+  body. Edge anchors follow the curved outline. The example contributes a Java
+  runtime style, GraphQL schema, React renderer, converter and layout handler
+  through Sirius Web's extension points, while reusing its editing tools.
 * **A conversation diagram with editing tools:** combine a message timeline and
   knowledge graph, defined with Sirius Web's Java builders and AQL services.
   Create participants, messages, facts, instructions and argument links directly
@@ -78,7 +83,7 @@ downloads:
 | [`keml.io`](keml.io/) | Provides the existing KEML file-loading and serialization utilities, including JSON support and conversion from yEd/GraphML diagrams. These utilities support the analysis library and upstream command-line tools. |
 | [`keml.analysis`](keml.analysis/) | Analyses conversation statistics, argument relationships and trust scenarios. Exposes reusable Java results and CSV/Excel report generation, used by the sample application's analysis feature. It also retains the upstream standalone analysis entry points. |
 | [`keml.diagram`](keml.diagram/) | Defines the Sirius Web conversation timeline and knowledge graph, their node and edge creation tools, AQL services and layout. Contributes the **KEML Conversation** project template and example model. The module can be reused by another Sirius Web application. |
-| [`keml.frontend`](keml.frontend/) | Builds a React/Vite frontend using Sirius Web's published workbench components. Adds the **Analyse conversation…** dialog with Overview, Argumentation and Trust tabs, scenario controls and report download, plus a custom trust widget in Details. Its frontend assets are packaged for the Java application. |
+| [`keml.frontend`](keml.frontend/) | Builds a React/Vite frontend using Sirius Web's published workbench components. Adds the **Analyse conversation…** dialog with Overview, Argumentation and Trust tabs, scenario controls and report download, a custom trust widget in Details, and the programmatic pre-knowledge cylinder node. Its frontend assets are packaged for the Java application. |
 | [`keml.app`](keml.app/) | Launches the standalone Spring Boot application. Registers the EMF package and adapter factory, installs the diagram contributions, exposes analysis and report endpoints, and supplies application configuration and the startup banner. Produces the executable `keml.jar`. |
 | [`keml.releng`](keml.releng/) | Supplies the parent POM and complete Maven reactor, shared dependency versions and build configuration. Includes the Dockerfile, Docker Compose setup for the application and PostgreSQL, and detailed build, Eclipse import and launch documentation. |
 | [`web-editor`](web-editor/) | Contains the upstream KEML web editor's published static assets, retained as a reference for the Sirius Web experiment. It is outside the Maven reactor. |
@@ -108,7 +113,7 @@ record the origins of the pre-existing code before repository consolidation.
 
 The [Build and test workflow](.github/workflows/build.yml) runs on pushes to
 `main`, pull requests and manual dispatch. It builds the complete Maven reactor
-with Java 21, runs the Java tests, and type-checks and bundles the frontend.
+with Java 21, runs the Java and frontend geometry tests, and type-checks and bundles the frontend.
 Test failures fail the build; test reports are uploaded even when the build fails.
 
 To download the Java application, open the repository's

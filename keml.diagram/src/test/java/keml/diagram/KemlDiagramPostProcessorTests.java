@@ -33,6 +33,8 @@ import org.eclipse.sirius.components.diagrams.RectangularNodeStyle;
 import org.eclipse.sirius.components.diagrams.ViewModifier;
 import org.eclipse.sirius.components.diagrams.components.BorderNodePosition;
 import org.eclipse.sirius.components.diagrams.layoutdata.DiagramLayoutData;
+import org.eclipse.sirius.components.diagrams.layoutdata.HandleLayoutData;
+import org.eclipse.sirius.components.diagrams.layoutdata.HandleType;
 import org.eclipse.sirius.components.diagrams.layoutdata.NodeLayoutData;
 import org.eclipse.sirius.components.diagrams.layoutdata.Position;
 import org.eclipse.sirius.components.diagrams.layoutdata.Size;
@@ -103,7 +105,9 @@ class KemlDiagramPostProcessorTests {
                 this.edge("partnerLine", "LifelineEdge", "partner", "partnerTail", partner),
                 this.edge("send", "SendMessageEdge", "sendAuthor", "sendPartner", send),
                 this.edge("receive", "ReceiveMessageEdge", "receivePartner", "receiveAuthor", receive),
-                this.edge("generated", "GeneratedInformationEdge", "receiveAuthor", "fact", fact));
+                this.edge("generated", "GeneratedInformationEdge", "receiveAuthor", "fact", fact),
+                this.edge("used", "UsedInformationEdge", "preknowledge", "sendAuthor", send),
+                this.edge("repeated", "RepeatedInformationEdge", "receiveAuthor", "secondPreknowledge", receive));
         Diagram diagram = Diagram.newDiagram("diagram").targetObjectId(this.identities.getId(conversation)).descriptionId(this.diagramIds.getId(description))
                 .nodes(nodes).edges(edges).style(DiagramStyle.newDiagramStyle().build()).build();
         assertThat(processor.canHandle(editingContext, new DiagramContext(diagram))).isTrue();
@@ -121,7 +125,8 @@ class KemlDiagramPostProcessorTests {
         assertThat(positions.get("fact").position().x()).isLessThan(positions.get("author").position().x());
         assertThat(positions.get("fact").movedByUser()).isFalse();
         assertThat(positions.get("author").handleLayoutData()).singleElement().satisfies(handle -> assertThat(handle.handlePosition()).isEqualTo("bottom"));
-        assertThat(positions.get("sendAuthor").handleLayoutData()).singleElement().satisfies(handle -> assertThat(handle.handlePosition()).isEqualTo("right"));
+        assertThat(positions.get("sendAuthor").handleLayoutData()).filteredOn(handle -> handle.edgeId().equals("send"))
+                .singleElement().satisfies(handle -> assertThat(handle.handlePosition()).isEqualTo("right"));
         assertThat(positions.get("sendPartner").handleLayoutData()).singleElement().satisfies(handle -> assertThat(handle.handlePosition()).isEqualTo("left"));
         assertThat(processor.postProcess(editingContext, new DiagramContext(initialized))).isEmpty();
 
@@ -131,7 +136,10 @@ class KemlDiagramPostProcessorTests {
                 oldFact.handleLayoutData(), oldFact.minComputedSize()));
         var oldStore = customNodes.get("preknowledge");
         customNodes.put("preknowledge", new NodeLayoutData("preknowledge", new Position(20, 15), new Size(460, 180), true, true,
-                oldStore.handleLayoutData(), oldStore.minComputedSize()));
+                List.of(new HandleLayoutData("used", new Position(115, 0), "top", HandleType.source)), oldStore.minComputedSize()));
+        var oldRepeated = customNodes.get("secondPreknowledge");
+        customNodes.put("secondPreknowledge", new NodeLayoutData(oldRepeated.id(), oldRepeated.position(), oldRepeated.size(), false, false,
+                List.of(new HandleLayoutData("repeated", new Position(390, 40), "right", HandleType.target)), oldRepeated.minComputedSize()));
         Diagram customized = Diagram.newDiagram(initialized).layoutData(new DiagramLayoutData(customNodes, initialized.getLayoutData().edgeLayoutData(), Map.of(), false)).build();
         receive.setTiming(0);
         Diagram reordered = processor.postProcess(editingContext, new DiagramContext(customized)).orElseThrow();
@@ -140,7 +148,18 @@ class KemlDiagramPostProcessorTests {
         assertThat(reorderedNodes.get("fact").size()).isEqualTo(new Size(300, 130));
         assertThat(reorderedNodes.get("preknowledge").position()).isEqualTo(new Position(20, 15));
         assertThat(reorderedNodes.get("preknowledge").size()).isEqualTo(new Size(460, 180));
+        assertThat(reorderedNodes.get("preknowledge").handleLayoutData()).containsExactly(
+                new HandleLayoutData("used", new Position(115, 0), "top", HandleType.source));
+        assertThat(reorderedNodes.get("secondPreknowledge").handleLayoutData()).containsExactly(
+                new HandleLayoutData("repeated", new Position(390, 40), "right", HandleType.target));
         assertThat(reorderedNodes.get("receiveAuthor").position().y()).isLessThan(reorderedNodes.get("sendAuthor").position().y());
+        assertThat(processor.postProcess(editingContext, new DiagramContext(reordered))).isEmpty();
+        var widerDefault = Diagram.newDiagram(reordered).nodes(reordered.getNodes().stream()
+                .map(node -> node.getId().equals("secondPreknowledge") ? Node.newNode(node).defaultWidth(500).build() : node).toList()).build();
+        var wider = processor.postProcess(editingContext, new DiagramContext(widerDefault)).orElseThrow();
+        assertThat(wider.getLayoutData().nodeLayoutData().get("secondPreknowledge").handleLayoutData()).containsExactly(
+                new HandleLayoutData("repeated", new Position(500, 40), "right", HandleType.target));
+        assertThat(processor.postProcess(editingContext, new DiagramContext(wider))).isEmpty();
         editingContext.dispose();
     }
 

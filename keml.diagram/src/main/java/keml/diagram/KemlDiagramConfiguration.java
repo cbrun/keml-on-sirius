@@ -11,7 +11,8 @@ import org.springframework.context.annotation.Import;
 /** Installs the KEML diagram and its tools in a Sirius Web application. */
 @Configuration(proxyBeanMethods = false)
 @Import({KemlJavaServiceProvider.class, KemlViewEditingContextInitializer.class,
-        KemlDiagramPostProcessor.class, KemlProjectTemplateProvider.class, KemlProjectTemplateInitializer.class})
+        KemlDiagramPostProcessor.class, KemlProjectTemplateProvider.class, KemlProjectTemplateInitializer.class,
+        CylinderNodeStyleProvider.class})
 public class KemlDiagramConfiguration {
 
     @Bean

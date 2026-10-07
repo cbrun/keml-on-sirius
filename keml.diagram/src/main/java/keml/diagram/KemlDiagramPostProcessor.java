@@ -137,8 +137,12 @@ public class KemlDiagramPostProcessor implements IDiagramPostProcessor {
                     || edge.getDescriptionId().equals(this.descriptionIds.get("ReceiveMessageEdge"));
             String sourceSide = lifeline ? "bottom" : source.position().x() <= target.position().x() ? "right" : "left";
             String targetSide = lifeline ? "top" : sourceSide.equals("right") ? "left" : "right";
-            handles.computeIfAbsent(source.id(), ignored -> new ArrayList<>()).add(this.handle(edge, source, sourceSide, HandleType.source));
-            handles.computeIfAbsent(target.id(), ignored -> new ArrayList<>()).add(this.handle(edge, target, targetSide, HandleType.target));
+            handles.computeIfAbsent(source.id(), ignored -> new ArrayList<>()).add(lifeline || message
+                    ? this.handle(edge, source, sourceSide, HandleType.source)
+                    : this.knowledgeHandle(diagram, edge, source, target, HandleType.source));
+            handles.computeIfAbsent(target.id(), ignored -> new ArrayList<>()).add(lifeline || message
+                    ? this.handle(edge, target, targetSide, HandleType.target)
+                    : this.knowledgeHandle(diagram, edge, target, source, HandleType.target));
             if (lifeline || message) {
                 edges.put(edge.getId(), new EdgeLayoutData(edge.getId(), List.of(), List.of(), List.of()));
             }
@@ -196,5 +200,34 @@ public class KemlDiagramPostProcessor implements IDiagramPostProcessor {
         double x = side.equals("left") ? 0 : side.equals("right") ? node.size().width() : node.size().width() / 2;
         double y = side.equals("top") ? 0 : side.equals("bottom") ? node.size().height() : node.size().height() / 2;
         return new HandleLayoutData(edge.getId(), new Position(x, y), side, type);
+    }
+
+    private HandleLayoutData knowledgeHandle(Diagram diagram, Edge edge, NodeLayoutData node, NodeLayoutData other, HandleType type) {
+        // Knowledge anchors belong to the user. Only chronology edges have imposed side midpoints.
+        NodeLayoutData previous = diagram.getLayoutData().nodeLayoutData().get(node.id());
+        if (previous != null) {
+            var saved = previous.handleLayoutData().stream().filter(handle -> edge.getId().equals(handle.edgeId()) && type == handle.type()).findFirst();
+            if (saved.isPresent() && previous.size().width() > 0 && previous.size().height() > 0) {
+                var handle = saved.get();
+                if (node.size().equals(previous.size())) {
+                    return handle;
+                }
+                return new HandleLayoutData(edge.getId(), new Position(
+                        (handle.position().x() / previous.size().width()) * node.size().width(),
+                        (handle.position().y() / previous.size().height()) * node.size().height()), handle.handlePosition(), type);
+            }
+        }
+        // Start toward the other endpoint; the custom frontend handler projects onto the cylinder.
+        double dx = other.position().x() + other.size().width() / 2 - node.position().x() - node.size().width() / 2;
+        double dy = other.position().y() + other.size().height() / 2 - node.position().y() - node.size().height() / 2;
+        double horizontal = dx == 0 ? Double.POSITIVE_INFINITY : node.size().width() / 2 / Math.abs(dx);
+        double vertical = dy == 0 ? Double.POSITIVE_INFINITY : node.size().height() / 2 / Math.abs(dy);
+        if (!Double.isFinite(Math.min(horizontal, vertical))) {
+            return this.handle(edge, node, "right", type);
+        }
+        double ratio = Math.min(horizontal, vertical);
+        String side = horizontal <= vertical ? dx < 0 ? "left" : "right" : dy < 0 ? "top" : "bottom";
+        return new HandleLayoutData(edge.getId(), new Position(node.size().width() / 2 + dx * ratio,
+                node.size().height() / 2 + dy * ratio), side, type);
     }
 }

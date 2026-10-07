@@ -31,3 +31,14 @@ body { margin: 0; }
 }
 .keml-trust-range:focus-visible { outline: 2px solid #007bff; outline-offset: 4px; }
 .keml-trust-range:disabled { opacity: 0.5; cursor: default; }
+/* Clamp only the rendered text. Sirius's direct-edit input still edits the complete message. */
+.keml-cylinder-label [data-svg="text"] {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--keml-label-lines);
+  line-height: var(--keml-label-line-height);
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+  overflow: hidden;
+  width: 100%;
+}
