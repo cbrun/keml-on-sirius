@@ -12,6 +12,11 @@ editing tools, project templates, frontend extensions and a runnable application
 with PostgreSQL persistence. KEML provides the example domain: conversations,
 participants, messages, knowledge and argument links.
 
+The conversation editor combines a layout inspired by sequence diagrams with a
+knowledge graph:
+
+![KEML conversation editor showing participant lifelines, messages and knowledge cards](screenshot.png)
+
 ## What this example demonstrates
 
 * **From an Ecore metamodel to a web application:** reuse an existing EMF model,
@@ -53,6 +58,11 @@ participants, messages, knowledge and argument links.
   a Java 21 Docker image running as a non-root user, and Docker Compose with
   PostgreSQL and a persistent database volume. The sample includes the
   configuration and instructions to build, launch and adapt the application.
+
+The frontend extension adds conversation analysis, trust scenarios and report
+downloads:
+
+![KEML analysis dialog showing trust scenarios, knowledge scores and report download](screenshot-analysis.png)
 
 ## Projects
 
