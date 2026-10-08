@@ -30,6 +30,9 @@ knowledge graph:
   body. Edge anchors follow the curved outline. The example contributes a Java
   runtime style, GraphQL schema, React renderer, converter and layout handler
   through Sirius Web's extension points, while reusing its editing tools.
+
+  ![Selected pre-knowledge cylinder with its label inside the body, resize controls and an attached edge](screenshot-programmatic-shape.png)
+
 * **A conversation diagram with editing tools:** combine a message timeline and
   knowledge graph, defined with Sirius Web's Java builders and AQL services.
   Create participants, messages, facts, instructions and argument links directly
@@ -38,6 +41,9 @@ knowledge graph:
   vertical lifelines, order messages down the conversation timeline, and arrange
   related knowledge cards alongside it. A diagram post-processor applies this
   layout in Sirius Web, showing how to position elements for a specific domain.
+
+  ![Sequence-like layout with Author, LLM and Browser lifelines and ordered conversation messages](screenshot-custom-layout.png)
+
 * **Conversation analysis inside the application:** open **Analyse conversation…**
   from the Explorer to inspect conversation statistics, argument relationships
   and trust scenarios. Adjust scenario controls and recalculate results from a
@@ -53,6 +59,9 @@ knowledge graph:
   synchronized numeric input. Java form descriptions and a React widget
   contribution reuse Sirius Web's standard editing flow, with backend validation
   and a distinct gray state for unassessed values.
+
+  ![Custom Details widgets showing an unassessed felt-trust value and the colored initial-trust slider with numeric input](screenshot-custom-widget.png)
+
 * **A project template with a worked example:** the **KEML Conversation** template
   has its own illustration and initializes an editable example conversation.
   It shows how to contribute a template and populate its model using Sirius Web's
